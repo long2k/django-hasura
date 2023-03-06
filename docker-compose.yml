@@ -1,0 +1,34 @@
+version: '3.8'
+services:
+  postgres:
+    container_name: accessory_database
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: accessory_123
+      POSTGRES_PASSWORD: accessory_123
+      PGDATA: /data/postgres
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres-db:/data/postgres
+    networks:
+      - accessory_net
+  server:
+    container_name: accessory_server
+    build: .
+    ports:
+      - "8006:8006"
+    command: python manage.py runserver 0.0.0.0:8006
+    restart: always
+    depends_on: 
+      - postgres
+    volumes:
+      - .:/usr/src/app
+    networks:
+      - accessory_net
+    
+    
+volumes:
+  postgres-db:
+networks:
+    accessory_net:
