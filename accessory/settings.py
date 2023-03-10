@@ -11,6 +11,19 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import environ
+import os
+
+# set up environment variable
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+env =  environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
+# Minio environment setup 
+# MINIO_ACCESS_KEY = env('MINIO_ACCESS_KEY')
+# MINIO_SECRET_KEY = env('MINIO_SECRET_KEY')
+# MINIO_BUCKET_NAME = env('MINIO_BUCKET_NAME')
+# MINIO_ENDPOINT = env('MINIO_ENDPOINT')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,6 +50,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'drf_yasg',
+    'categories',
+    'products'
 ]
 
 MIDDLEWARE = [
@@ -76,11 +93,11 @@ WSGI_APPLICATION = 'accessory.wsgi.application'
 DATABASES = {
         'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'accessory_123',
-        'USER': 'accessory_123',
-        'PASSWORD': 'accessory_123',
-        'HOST': 'accessory_database',
-        'PORT': 5432
+        'NAME': env('DATABASE_NAME'),
+        'USER': env('DATABASE_USER'),
+        'PASSWORD': env('DATABASE_PASS'),
+        'HOST': env('DATABASE_HOST'),
+        'PORT': env('DATABASE_PORT')
     }
 }
 
@@ -125,3 +142,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+ADMIN_URL = "admin-accessory"
+
